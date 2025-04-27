@@ -80,7 +80,7 @@ Data enthusiast passionates about solving real-world problems through data scien
 
 ## 📫 Contact
 
-- 📧 [shayarshrestha7]  
+- 📧 [shayarshrestha7@gmail.com]  
 - 🔗 [[Linkedin](https://www.linkedin.com/in/shayarshrestha/)]
 
 ---
