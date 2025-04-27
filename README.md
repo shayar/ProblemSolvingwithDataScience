@@ -2,10 +2,12 @@
 
 ## 📌 About the Repository
 
-**ProblemSolvingwithDataScience** is a collection of machine learning and data analysis projects, each focused on solving real-world problems through a structured, data-driven approach.  
-The core idea of this repository is to demonstrate how data science can be effectively used to understand, analyze, and solve different types of problems — not just by building models, but by following the complete problem-solving cycle from problem definition to actionable insights.
+**ProblemSolvingwithDataScience** is a collection of real-world problem-solving projects using data science methodologies.  
+The primary focus is on solving problems end-to-end — from problem definition, data exploration, preprocessing, model building, and evaluation, to insights and conclusions.
 
-Each project is organized into its own folder, containing well-documented Jupyter notebooks (`.ipynb`), primarily designed to run on **Google Colab** for ease of use.
+Each project is placed in its own folder, and where applicable, solutions are provided using both **Python** and **R** to showcase versatility in approach.
+
+All notebooks are shared as Google Colab (`.ipynb`) files for Python solutions and `.Rmd` or `.ipynb` (via `IRkernel`) for R solutions.
 
 ---
 
@@ -28,32 +30,34 @@ Predict health insurance costs using features like age, BMI, smoking status, num
 - Model Evaluation and Interpretation  
 - Result Visualization  
 
-**Folder Structure:**
+## 🗂️ Folder Structure
 
-ProblemSolvingwithDataScience/ │── HealthInsuranceCostPrediction/ │ └── HealthInsuranceCostPrediction.ipynb # Google Colab notebook │── README.md # Main repository documentation
+ProblemSolvingwithDataScience/ │── HealthInsuranceCostPrediction/ # Current active project │ ├── Python/ # Solution in Python (Google Colab) │ │ └── HealthInsuranceCostPrediction.ipynb │ └── R/ # Solution in R (R Markdown or IRkernel notebook) │ └── HealthInsuranceCostPrediction.Rmd │── README.md # Main repository documentation
 
 ---
 
-## 🚀 Technologies Used
+## 🛠️ Technologies Used
 
-- **Python 3.x**
-- **Pandas**, **NumPy**
-- **Matplotlib**, **Seaborn**
-- **Scikit-learn**
-- **Google Colab**
+- **Python 3.x (Google Colab)**
+  - Pandas, NumPy, Matplotlib, Seaborn, Scikit-learn
+- **R (RStudio / Colab via IRkernel)**
+  - tidyverse, ggplot2, caret, dplyr
+- **Google Colab, R Markdown, Jupyter Notebook**
 
 ---
 
 ## 📈 How to Use
 
-1. Clone the repository: git clone https://github.com/your-username/ProblemSolvingwithDataScience.git
+1. **Clone the repository:** git clone https://github.com/your-username/ProblemSolvingwithDataScience.git
 
-2. Navigate to the project folder you are interested in:
+2. **Navigate to the project folder you are interested in:**
 
 cd ProblemSolvingwithDataScience/HealthInsuranceCostPrediction
 
-3. Open the `.ipynb` notebook using **Google Colab** or Jupyter Notebook.
-4. Follow the step-by-step explanations inside the notebook to understand the problem, approach, and results.
+3. **Choose your preferred solution approach:**
+- For Python: Open the notebook in **Google Colab**
+- For R: Open the `.Rmd` file in **RStudio** or use Jupyter with **IRkernel**
+4. **Follow the notebook steps** to explore the data, understand the problem, and see the modeling approach and results.
 
 ---
 
@@ -80,15 +84,21 @@ Data enthusiast passionates about solving real-world problems through data scien
 
 ## 📫 Contact
 
+For any questions, feedback, or collaborations, feel free to reach out:
+
 - 📧 [shayarshrestha7@gmail.com]  
 - 🔗 [[Linkedin](https://www.linkedin.com/in/shayarshrestha/)]
 
 ---
 
-## ⭐ Contribute
+## 💡 Contributing Guidelines
 
-This is a personal learning project. Suggestions, discussions, and contributions are always welcome!  
-Feel free to open an issue or submit a pull request for improvements or ideas.
+We are open to suggestions and contributions to make this repository better. If you have ideas for improvements, feel free to:
+
+1. Fork the repository  
+2. Create a new branch (`feature/your-feature-name`)  
+3. Commit your changes  
+4. Open a pull request with a clear description of what you’ve done  
 
 ---
 
