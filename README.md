@@ -70,17 +70,18 @@ Here are some of the future problems planned to be solved in this repository:
 
 ---
 
-## 🧑‍💻 Author
+## 🧑‍💻 Authors
 
-**[Your Name]**  
-A data enthusiast passionate about solving real-world problems through data science, machine learning, and statistical modeling. Focused on applying practical and scalable solutions to complex challenges.
+**[Melvin Gurung]**
+**[Shayar Shrestha]**
+Data enthusiast passionates about solving real-world problems through data science, machine learning, and statistical modeling. Focused on applying practical and scalable solutions to complex challenges.
 
 ---
 
 ## 📫 Contact
 
-- 📧 [Your Email]  
-- 🔗 [Your LinkedIn / Portfolio / Website link, if any]
+- 📧 [shayarshrestha7]  
+- 🔗 [[Linkedin](https://www.linkedin.com/in/shayarshrestha/)]
 
 ---
 
