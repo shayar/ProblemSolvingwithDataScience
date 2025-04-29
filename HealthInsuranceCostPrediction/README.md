@@ -53,6 +53,8 @@ HealthInsuranceCostPrediction/ │── Python/ # Solution using Python (Google
 1. Open the notebook:  
    `Python/HealthInsuranceCostPrediction.ipynb`
 2. Run directly in **Google Colab** or locally in Jupyter Notebook.
+3. Download the csv file and move the csv file to colab (like local session).
+4. Link to kaggle data set: https://www.kaggle.com/datasets/mirichoi0218/insurance/data?select=insurance.csv
 
 ### 🟢 R Solution:
 
@@ -64,13 +66,13 @@ HealthInsuranceCostPrediction/ │── Python/ # Solution using Python (Google
 
 ## 🎯 Solution Workflow (Both Python and R)
 
-1. Problem Understanding & Hypothesis Building
-2. Exploratory Data Analysis (EDA)
-3. Data Cleaning and Preprocessing
-4. Feature Engineering
-5. Model Building (Linear Regression)
+1. Setting up important libraries
+2. Data Acquisition
+3. Data Cleaning & Preprocessing
+4. Exploratory Data Analysis (EDA) with Feature Engineering
+5. Model Training (Linear Regression)
 6. Model Evaluation (Metrics, Interpretation)
-7. Insights and Conclusion
+7. Conclusion
 
 ---
 
