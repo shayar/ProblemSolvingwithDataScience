@@ -1,0 +1,290 @@
+---
+title: "R Notebook"
+author: "Melvin and Shayar"
+output: html_notebook
+---
+
+Understanding Life Expectancy of the world
+
+**Problem Statement:** To analyze and predict Life Expectancy based on various socioeconomic and health-related indicators
+
+**Inspiration**:
+
+The data-set aims to answer the following key questions:
+
+-   Does various predicting factors which has been chosen initially really affect the Life expectancy? What are the predicting variables actually affecting the life expectancy?
+
+-   Should a country having a lower life expectancy value(\<65) increase its healthcare expenditure in order to improve its average lifespan?
+
+-   How does Infant and Adult mortality rates affect life expectancy?
+
+-   Does Life Expectancy has positive or negative correlation with eating habits, lifestyle, exercise, smoking, drinking alcohol etc.
+
+-   What is the impact of schooling on the lifespan of humans?
+
+-   Does Life Expectancy have positive or negative relationship with drinking alcohol?
+
+-   Do densely populated countries tend to have lower life expectancy?
+
+-   What is the impact of Immunization coverage on life Expectancy?
+
+Data set link:- <https://www.kaggle.com/datasets/kumarajarshi/life-expectancy-who/data>
+
+# **Step 1: Setting up Important Libraries**
+
+```{r}
+#install.packages("caret")
+install.packages("Metrics")
+library(ggplot2)
+library(dplyr)
+library(caret)
+library(MASS)
+library(car)
+library(Metrics)
+```
+
+# **Step 2: Data Acquisition**
+
+```{r}
+WHO_life_expectancy_data <- read.csv('Life Expectancy Data.csv')
+head(WHO_life_expectancy_data)
+```
+
+We have fetched the dataset using the csv file download from the kaggle website. Now, we have also tried to see how the data looks and single it we can.
+
+# **Step 3: Exploratory Data Analysis (EDA) Before Handling Missing Values**
+
+```{r}
+colSums(is.na(WHO_life_expectancy_data))
+```
+
+Population, Hepatitis B, GDP are among the top 3 features with most missing values out of 2938 entries.
+
+```{r}
+summary(WHO_life_expectancy_data)
+```
+
+Now, we be trying to visualize the missing values using histograms and box plots for numerical values and Barplots for categorical values.
+
+Starting with having numerical columns and categorical columns in two different data frames.
+
+```{r}
+nums_col <- names(WHO_life_expectancy_data)[sapply(WHO_life_expectancy_data, is.numeric)]
+
+cat_col <- names(WHO_life_expectancy_data)[sapply(WHO_life_expectancy_data, function(x) is.factor(x) || is.character(x))]
+```
+
+```{r}
+# Histograms for numerical columns
+for (col in nums_col) {
+  print(
+    ggplot(WHO_life_expectancy_data, aes_string(x = col)) +
+      geom_histogram(bins = 30, fill = "skyblue", color = "white") +
+      ggtitle(paste("Histogram of", col))
+  )
+}
+
+# Boxplots for numerical columns
+for (col in nums_col) {
+  print(
+    ggplot(WHO_life_expectancy_data, aes_string(y = col)) +
+      geom_boxplot(fill = "orange") +
+      ggtitle(paste("Boxplot of", col))
+  )
+}
+
+# Barplots for categorical columns
+for (col in cat_col) {
+  print(
+    ggplot(WHO_life_expectancy_data, aes_string(x = col)) +
+      geom_bar(fill = "lightgreen") +
+      ggtitle(paste("Barplot of", col))
+  )
+}
+```
+
+From here, we learnt that there were around 500 entries for Developed Countries and more than 2000 for Developing Countries. Using Histogram, we can also see that, most of the people have life expectancy between 70-80 years. Everything over here, was done on the datasets without the handling of missing values. So, we would definitely see more outliers for now.
+
+# **Step 4: Data Cleaning and Pre-processing**
+
+Calculating the percentage of Missing Values.
+
+```{r}
+missing_pct <- colMeans(is.na(WHO_life_expectancy_data)) * 100
+```
+
+Now, Identifying the columns which has 5% missing values.
+
+```{r}
+cols_5_or_less <- names(missing_pct[missing_pct > 0 & missing_pct <= 5])
+```
+
+Now, splitting this columns into numerical and categorical data.
+
+```{r}
+num_cols_5_or_less <- cols_5_or_less[sapply(WHO_life_expectancy_data[cols_5_or_less], is.numeric)]
+
+cat_cols_5_or_less <- cols_5_or_less[sapply(WHO_life_expectancy_data[cols_5_or_less], function(x) is.factor(x) || is.character(x))]
+```
+
+```{r}
+print(num_cols_5_or_less)
+print(cat_cols_5_or_less)
+```
+
+Since, there is no any categorical data missing so will we just handle the numerical ones. Now, Handling the missing numerical data using median.
+
+```{r}
+for (col in num_cols_5_or_less) {
+  med <- median(WHO_life_expectancy_data[[col]], na.rm = TRUE)
+  WHO_life_expectancy_data[[col]][is.na(WHO_life_expectancy_data[[col]])] <- med
+}
+```
+
+Now to handle the missing values more than 5% we need to filter them out first.
+
+```{r}
+missing_pct <- colMeans(is.na(WHO_life_expectancy_data)) * 100
+cols_over_5 <- names(missing_pct[missing_pct > 5])
+```
+
+After this, we need to split the columns in numerical.
+
+```{r}
+num_cols_over_5 <- cols_over_5[sapply(WHO_life_expectancy_data[cols_over_5], is.numeric)]
+```
+
+```{r}
+for (col in num_cols_over_5) {
+  WHO_life_expectancy_data <- WHO_life_expectancy_data %>%
+    group_by(Country) %>%
+    mutate(
+      !!col := ifelse(
+        is.na(.data[[col]]),
+        median(.data[[col]], na.rm = TRUE),
+        .data[[col]]
+      )
+    ) %>%
+    ungroup()
+}
+```
+
+```{r}
+colSums(is.na(WHO_life_expectancy_data))
+```
+
+We have handled the missing numerical values which were more than 5% by grouping them by countries and taking the median of it. But, we still have cases where all the values of the countries were missing. So, we will now, calculate the median by year.
+
+```{r}
+for (col in num_cols_over_5) {
+  WHO_life_expectancy_data <- WHO_life_expectancy_data %>%
+    group_by(Year) %>%
+    mutate(
+      !!col := ifelse(
+        is.na(.data[[col]]),
+        median(.data[[col]], na.rm = TRUE),
+        .data[[col]]
+      )
+    ) %>%
+    ungroup()
+}
+
+colSums(is.na(WHO_life_expectancy_data))
+```
+
+Now, all the missing values have been handled.
+
+# **Step 5: Exploratory Data Analysis (EDA) After Handling Missing Values**
+
+```{r}
+nums_col <- names(WHO_life_expectancy_data)[sapply(WHO_life_expectancy_data, is.numeric)]
+```
+
+Now, we will checking using Histogram and Boxplots to check the difference.
+
+```{r}
+# Histograms for numerical columns
+for (col in nums_col) {
+  print(
+    ggplot(WHO_life_expectancy_data, aes_string(x = col)) +
+      geom_histogram(bins = 30, fill = "skyblue", color = "white") +
+      ggtitle(paste("Histogram of", col))
+  )
+}
+
+# Boxplots for numerical columns
+for (col in nums_col) {
+  print(
+    ggplot(WHO_life_expectancy_data, aes_string(y = col)) +
+      geom_boxplot(fill = "orange") +
+      ggtitle(paste("Boxplot of", col))
+  )
+}
+```
+
+# **Step 6: Model Training**
+
+We are now splitting the data into training and test sets becuase it prevents overfitting and provides unbiased evaluation.
+
+```{r}
+set.seed(123)
+train_index <- createDataPartition(WHO_life_expectancy_data$Life.expectancy, p = 0.8, list = FALSE)
+train_data <- WHO_life_expectancy_data[train_index, ]
+test_data  <- WHO_life_expectancy_data[-train_index, ]
+```
+
+Now, we will be fitting the basic regression model with all predictors on the training set. This will establish a starting point, shows which variables matter and if data supports a linear relationship.
+
+```{r}
+model_baseline <- lm(Life.expectancy ~ ., data = train_data)
+summary(model_baseline)
+```
+
+Overall Interpretation The model fits the training data extremely well, with high R² and low residual error.
+
+Country effects are the most important drivers, but other features (year, mortality, health expenditure, alcohol) are also influential.
+
+Caution: With this many country dummies, the model may be overfitting or simply capturing country means. Stepwise selection or regularization is needed for model refinement.
+
+```{r}
+model_step <- stepAIC(model_baseline, direction = "both")
+summary(model_step)
+```
+
+Our final model, selected by stepwise regression, explains nearly 97% of the variation in life expectancy. It includes country, year, mortality and disease indicators, expenditure, and schooling. Most coefficients are highly significant, especially country, year, adult mortality, HIV/AIDS, under-five deaths, and schooling. Prediction errors are low for most countries, with a typical error around 1.8 years.
+
+# **Step 7: Model Evaluation & Diagnotics**
+
+```{r}
+# Keep only test rows where Country is present in the training data
+valid_countries <- unique(train_data$Country)
+test_data_valid <- test_data[test_data$Country %in% valid_countries, ]
+
+# Now predict only on valid test data
+test_preds <- predict(model_step, newdata = test_data_valid)
+```
+
+Now, calculating performance metrics on Test Data
+
+```{r}
+# Calculate metrics
+rmse_test <- rmse(test_data_valid$Life.expectancy, test_preds)
+mae_test  <- mae(test_data_valid$Life.expectancy, test_preds)
+r2_test   <- R2(test_preds, test_data_valid$Life.expectancy)
+
+cat("Test RMSE:", rmse_test, "\nTest MAE:", mae_test, "\nTest R2:", r2_test, "\n")
+```
+
+```{r}
+test_resids <- test_data_valid$Life.expectancy - test_preds
+plot(test_preds, test_resids, 
+     main = "Residuals vs Fitted (Test Set)",
+     xlab = "Predicted Life Expectancy",
+     ylab = "Residuals", 
+     pch = 20, col = "blue")
+abline(h = 0, lty = 2, col = "red")
+```
+
+# **Model Conclusion**
+
+The final model achieved a Test RMSE of 2.30, MAE of 1.34, and R² of 0.944 on the test set, indicating strong predictive performance. The residuals vs. fitted plot showed random scatter around zero, with no significant evidence of bias or non-linearity, supporting the validity of the linear model assumptions. While a few outliers exist, the model explains over 94% of the variance in life expectancy across countries and years, and makes predictions within 1–2 years of actual values on average. This suggests the model is both accurate and reliable for practical use.
