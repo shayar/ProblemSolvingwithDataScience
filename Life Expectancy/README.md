@@ -105,8 +105,10 @@ LifeExpectancyPrediction/
 
 ## 📫 Contact
 
-- Email: shayarshrestha7@gmail.com
-- LinkedIn: _(add your LinkedIn if desired)_
+- Shayar's Email: shayarshrestha7@gmail.com,
+- Shayar's LinkedIn: [[Linkedin](https://www.linkedin.com/in/shayarshrestha/)]
+- Melvin's Email: melvcoded@gmail.com
+- Melvin's LinkedIn: [[Linkedin](https://www.linkedin.com/in/melvin-gurung-734b55211/)]
 
 ---
 
